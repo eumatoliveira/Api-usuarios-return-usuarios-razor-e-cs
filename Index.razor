@@ -1,0 +1,33 @@
+@page "/usuarios"
+
+<h3>Usuários</h3>
+
+@if (usuarios == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <ul>
+        @foreach (var user in usuarios)
+        {
+            <li>@user.Name - @user.Email</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Usuario> usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var http = new HttpClient { BaseAddress = new Uri("https://jsonplaceholder.typicode.com") };
+        usuarios = await http.GetFromJsonAsync<List<Usuario>>("users");
+    }
+
+    public class Usuario
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
+}
